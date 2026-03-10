@@ -15,7 +15,7 @@ target/
 logs/
 *.log
 
-# Node.js/Frontend
+# Node.js/Frontend (General)
 node_modules/
 dist/
 build/
@@ -28,6 +28,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# OS Files
-.DS_Store
-Thumbs.db
+# Angular Specific
+out-tsc/
+bazel-out/
+.angular/
+.nx/
+/*-error.log
+.pnp
+.pnp.js
+.angular/cache
