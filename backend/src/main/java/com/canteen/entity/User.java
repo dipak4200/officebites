@@ -21,7 +21,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
-    
-    // For Employees, we could store additional details like name, email, etc.
+
     private String fullName;
+
+    @Column(unique = true)
+    private String email;
 }
+
