@@ -83,8 +83,8 @@ import { HealthGoal } from '../../../core/models/models';
   styles: [`
     .dashboard-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; }
     .goal-card {
-      background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(6,182,212,0.1));
-      border: 1px solid rgba(99,102,241,0.3);
+      background: linear-gradient(135deg, rgba(245,145,26,0.1), rgba(255,107,0,0.1));
+      border: 1px solid rgba(245,145,26,0.3);
       border-radius: 20px; padding: 28px; display: flex; flex-direction: column;
       &.no-goal { align-items: center; text-align: center; }
       h3 { font-size: 16px; font-weight: 600; color: #f1f5f9; }
@@ -93,16 +93,16 @@ import { HealthGoal } from '../../../core/models/models';
     .goal-header { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
     .goal-icon { font-size: 40px; }
     .goal-details { display: flex; flex-direction: column; gap: 12px; flex: 1; }
-    .detail-item { display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 10px; }
+    .detail-item { display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(245,145,26,0.06); border-radius: 10px; }
     .d-label { color: #94a3b8; font-size: 13px; }
     .d-value { color: #f1f5f9; font-weight: 600; font-size: 14px; }
     .quick-actions { h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #f1f5f9; } }
     .action-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .action-card {
-      background: #1e293b; border: 1px solid rgba(99,102,241,0.2);
+      background: #1C1612; border: 1px solid rgba(245,145,26,0.2);
       border-radius: 16px; padding: 24px; text-decoration: none;
       display: flex; flex-direction: column; gap: 6px; transition: all 0.2s;
-      &:hover { border-color: rgba(99,102,241,0.5); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(99,102,241,0.15); }
+      &:hover { border-color: rgba(245,145,26,0.5); transform: translateY(-4px); box-shadow: 0 12px 30px rgba(245,145,26,0.2); }
     }
     .action-icon { font-size: 32px; }
     .action-title { font-size: 15px; font-weight: 600; color: #f1f5f9; }

@@ -59,19 +59,19 @@ import { FoodItem } from '../../../core/models/models';
   styles: [`
     .info-banner {
       display: flex; align-items: flex-start; gap: 20px;
-      background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.3);
+      background: rgba(245,145,26,0.1); border: 1px solid rgba(245,145,26,0.3);
       border-radius: 16px; padding: 28px;
       .banner-icon { font-size: 36px; flex-shrink: 0; }
       strong { font-size: 16px; font-weight: 600; color: #f1f5f9; }
       p { color: #94a3b8; font-size: 14px; margin-top: 4px; }
     }
     .food-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .rec-card { position: relative; border-color: rgba(99,102,241,0.4) !important; }
+    .rec-card { position: relative; border-color: rgba(245,145,26,0.4) !important; }
     .rec-badge {
       display: inline-flex; align-items: center; gap: 4px;
-      padding: 4px 10px; background: linear-gradient(135deg,rgba(99,102,241,0.2),rgba(6,182,212,0.2));
-      border: 1px solid rgba(99,102,241,0.4); border-radius: 20px;
-      font-size: 11px; font-weight: 600; color: #a5b4fc; margin-bottom: 10px;
+      padding: 4px 10px; background: linear-gradient(135deg,rgba(245,145,26,0.2),rgba(255,107,0,0.2));
+      border: 1px solid rgba(245,145,26,0.4); border-radius: 20px;
+      font-size: 11px; font-weight: 600; color: #F5911A; margin-bottom: 10px;
     }
     .vendor-tag { font-size: 12px; color: #64748b; margin-top: 12px; }
   `]

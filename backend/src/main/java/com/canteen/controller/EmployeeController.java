@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class EmployeeController {
     private final FoodItemRepository foodItemRepository;
 
     @PostMapping("/health-goal")
-    public ResponseEntity<?> setHealthGoal(Authentication auth, @RequestBody HealthGoal healthGoal) {
+    public ResponseEntity<?> setHealthGoal(Authentication auth, @Valid @RequestBody HealthGoal healthGoal) {
         Optional<User> empOpt = userRepository.findByUsername(auth.getName());
         if (empOpt.isEmpty() || empOpt.get().getRole() != Role.EMPLOYEE) {
             return ResponseEntity.status(403).body("Access denied");

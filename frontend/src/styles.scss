@@ -2,23 +2,25 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
-/* CSS Variables */
+/* ===== OfficeBite Brand Color Palette ===== */
+/* Logo: warm orange #F5911A, charcoal #2D2D2D, white fork */
 :root {
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #e0e7ff;
-  --secondary: #06b6d4;
-  --success: #10b981;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --dark: #0f172a;
-  --dark-card: #1e293b;
-  --dark-border: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --bg: #0f172a;
-  --card-bg: #1e293b;
-  --card-border: rgba(99,102,241,0.2);
+  --primary:        #F5911A;
+  --primary-dark:   #D97B0A;
+  --primary-light:  rgba(245,145,26,0.15);
+  --primary-glow:   rgba(245,145,26,0.35);
+  --secondary:      #FF6B00;
+  --success:        #22c55e;
+  --danger:         #ef4444;
+  --warning:        #facc15;
+  --dark:           #0F0D0A;
+  --dark-card:      #1C1612;
+  --dark-border:    #3A2D1A;
+  --text-primary:   #F5F0E8;
+  --text-secondary: #A89880;
+  --bg:             #0F0D0A;
+  --card-bg:        #1C1612;
+  --card-border:    rgba(245,145,26,0.2);
 }
 
 * {
@@ -38,10 +40,85 @@ body {
   min-height: 100vh;
 }
 
-/* Angular Material Dark Override */
+/* ===== Angular Material MDC Form Field Dark Theme Fix ===== */
+/* Fixes label overlap / invisible text on dark backgrounds  */
+
+/* Outlined text field (appearance="outline") */
 .mat-mdc-form-field {
   width: 100%;
+
+  /* Input text color */
+  --mdc-outlined-text-field-input-text-color: #F5F0E8;
+  --mdc-outlined-text-field-input-text-placeholder-color: #6B5740;
+
+  /* Label colors: idle, focused, disabled */
+  --mdc-outlined-text-field-label-text-color: #A89880;
+  --mdc-outlined-text-field-focus-label-text-color: #F5911A;
+  --mdc-outlined-text-field-hover-label-text-color: #F5F0E8;
+  --mdc-outlined-text-field-disabled-label-text-color: #4a3c2a;
+
+  /* Outline border colors */
+  --mdc-outlined-text-field-outline-color: rgba(245,145,26,0.3);
+  --mdc-outlined-text-field-hover-outline-color: rgba(245,145,26,0.6);
+  --mdc-outlined-text-field-focus-outline-color: #F5911A;
+  --mdc-outlined-text-field-disabled-outline-color: rgba(245,145,26,0.1);
+
+  /* Container (background behind input) */
+  --mdc-outlined-text-field-container-shape: 10px;
+
+  /* Caret (cursor) color */
+  --mdc-outlined-text-field-caret-color: #F5911A;
+
+  /* Error state */
+  --mdc-outlined-text-field-error-label-text-color: #ef4444;
+  --mdc-outlined-text-field-error-outline-color: #ef4444;
+  --mdc-outlined-text-field-error-hover-outline-color: #ef4444;
+  --mdc-outlined-text-field-error-focus-outline-color: #ef4444;
+
+  /* Select / dropdown arrow */
+  --mat-select-trigger-text-color: #F5F0E8;
+  --mat-select-arrow-foreground-color: #A89880;
+  --mat-select-panel-background-color: #1C1612;
+
+  /* Make sure the native input background is transparent */
+  .mdc-text-field__input {
+    color: #F5F0E8 !important;
+    caret-color: #F5911A !important;
+  }
+
+  /* Floating label */
+  .mdc-floating-label {
+    color: #A89880;
+  }
+  .mdc-text-field--focused .mdc-floating-label {
+    color: #F5911A !important;
+  }
 }
+
+/* Filled text field uses different variables — cover both */
+.mdc-text-field:not(.mdc-text-field--outlined) {
+  background-color: rgba(245,145,26,0.06) !important;
+}
+
+/* Select panel (dropdown options) */
+.mat-mdc-select-panel {
+  background: #1C1612 !important;
+  border: 1px solid rgba(245,145,26,0.25) !important;
+
+  .mat-mdc-option {
+    color: #F5F0E8 !important;
+    &:hover, &.mat-mdc-option-active { background: rgba(245,145,26,0.12) !important; }
+    &.mdc-list-item--selected { color: #F5911A !important; }
+  }
+}
+
+/* Mat select trigger text */
+.mat-mdc-select-value-text { color: #F5F0E8 !important; }
+.mat-mdc-select-placeholder { color: #6B5740 !important; }
+
+/* Helper/hint text */
+.mat-mdc-form-field-hint { color: #A89880 !important; }
+.mat-mdc-form-field-error { color: #ef4444 !important; }
 
 .mat-mdc-card {
   background: var(--card-bg) !important;
@@ -49,7 +126,13 @@ body {
   border-radius: 16px !important;
 }
 
-/* Utility Classes */
+/* Mat slide toggle */
+:root {
+  --mat-slide-toggle-selected-track-color: #F5911A;
+  --mat-slide-toggle-selected-handle-color: #fff;
+}
+
+/* ===== Utility Classes ===== */
 .page-container {
   padding: 24px;
   max-width: 1400px;
@@ -61,8 +144,7 @@ body {
   h1 {
     font-size: 28px;
     font-weight: 700;
-    color: var(--text-primary);
-    background: linear-gradient(135deg, #6366f1, #06b6d4);
+    background: linear-gradient(135deg, #F5911A, #FF6B00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -74,6 +156,7 @@ body {
   }
 }
 
+/* Stat Cards */
 .stat-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -84,7 +167,7 @@ body {
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(99,102,241,0.15);
+    box-shadow: 0 20px 40px rgba(245,145,26,0.15);
   }
 
   .stat-icon {
@@ -113,6 +196,7 @@ body {
   }
 }
 
+/* Food Cards */
 .food-card {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
@@ -122,7 +206,7 @@ body {
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 20px 40px rgba(99,102,241,0.15);
+    box-shadow: 0 20px 40px rgba(245,145,26,0.15);
   }
 
   .food-name {
@@ -154,7 +238,7 @@ body {
 
     .nutrition-item {
       text-align: center;
-      background: rgba(99,102,241,0.1);
+      background: rgba(245,145,26,0.1);
       border-radius: 8px;
       padding: 8px 4px;
 
@@ -182,14 +266,14 @@ body {
   font-size: 12px;
   font-weight: 600;
 
-  &.badge-success { background: rgba(16,185,129,0.15); color: #10b981; }
-  &.badge-danger  { background: rgba(239,68,68,0.15); color: #ef4444; }
-  &.badge-primary { background: rgba(99,102,241,0.15); color: #6366f1; }
-  &.badge-warning { background: rgba(245,158,11,0.15); color: #f59e0b; }
-  &.badge-info    { background: rgba(6,182,212,0.15); color: #06b6d4; }
+  &.badge-success { background: rgba(34,197,94,0.15);  color: #22c55e; }
+  &.badge-danger  { background: rgba(239,68,68,0.15);  color: #ef4444; }
+  &.badge-primary { background: rgba(245,145,26,0.15); color: #F5911A; }
+  &.badge-warning { background: rgba(250,204,21,0.15); color: #facc15; }
+  &.badge-info    { background: rgba(255,107,0,0.15);  color: #FF6B00; }
 }
 
-/* Table */
+/* Data Table */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -209,17 +293,17 @@ body {
     padding: 14px 16px;
     font-size: 14px;
     color: var(--text-primary);
-    border-bottom: 1px solid rgba(51,65,85,0.5);
+    border-bottom: 1px solid rgba(58,45,26,0.5);
   }
 
   tbody tr:hover {
-    background: rgba(99,102,241,0.05);
+    background: rgba(245,145,26,0.05);
   }
 }
 
-/* Btn overrides */
+/* Primary Button */
 .btn-primary-gradient {
-  background: linear-gradient(135deg, #6366f1, #06b6d4) !important;
+  background: linear-gradient(135deg, #F5911A, #FF6B00) !important;
   color: white !important;
   border: none !important;
   border-radius: 10px !important;
@@ -228,11 +312,11 @@ body {
   transition: all 0.2s ease !important;
 
   &:hover {
-    box-shadow: 0 8px 20px rgba(99,102,241,0.4) !important;
+    box-shadow: 0 8px 20px rgba(245,145,26,0.4) !important;
     transform: translateY(-1px);
   }
 }
 
 /* Snackbar */
-.snack-success .mdc-snackbar__surface { background: #064e3b !important; color: #6ee7b7 !important; }
+.snack-success .mdc-snackbar__surface { background: #14532d !important; color: #86efac !important; }
 .snack-error   .mdc-snackbar__surface { background: #7f1d1d !important; color: #fca5a5 !important; }

@@ -65,9 +65,9 @@ import { MatIconModule } from '@angular/material/icon';
       position: fixed;
       top: 0; left: 0; right: 0;
       height: 64px;
-      background: rgba(15,23,42,0.95);
+      background: rgba(15,13,10,0.95);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(99,102,241,0.2);
+      border-bottom: 1px solid rgba(245,145,26,0.25);
       display: flex;
       align-items: center;
       padding: 0 24px;
@@ -78,13 +78,12 @@ import { MatIconModule } from '@angular/material/icon';
       display: flex;
       align-items: center;
       gap: 8px;
-      text-decoration: none;
       flex-shrink: 0;
       .nav-icon { font-size: 24px; }
       .nav-title {
         font-size: 18px;
         font-weight: 800;
-        background: linear-gradient(135deg, #6366f1, #06b6d4);
+        background: linear-gradient(135deg, #F5911A, #FF6B00);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -99,13 +98,12 @@ import { MatIconModule } from '@angular/material/icon';
     .nav-link {
       padding: 6px 16px;
       border-radius: 8px;
-      color: #94a3b8;
+      color: #A89880;
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
       transition: color 0.2s, background 0.2s;
-      &:hover { color: #f1f5f9; background: rgba(99,102,241,0.1); }
-      &.active { color: #6366f1; background: rgba(99,102,241,0.15); }
+      &:hover { color: #F5F0E8; background: rgba(245,145,26,0.12); }
     }
     .nav-user {
       display: flex;
@@ -120,15 +118,15 @@ import { MatIconModule } from '@angular/material/icon';
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      &.role-admin { background: rgba(239,68,68,0.15); color: #ef4444; }
-      &.role-vendor { background: rgba(245,158,11,0.15); color: #f59e0b; }
-      &.role-employee { background: rgba(16,185,129,0.15); color: #10b981; }
+      &.role-admin    { background: rgba(239,68,68,0.15);    color: #ef4444; }
+      &.role-vendor   { background: rgba(245,145,26,0.15);   color: #F5911A; }
+      &.role-employee { background: rgba(34,197,94,0.15);    color: #22c55e; }
     }
     .avatar {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #6366f1, #06b6d4);
+      background: linear-gradient(135deg, #F5911A, #FF6B00);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -142,10 +140,10 @@ import { MatIconModule } from '@angular/material/icon';
       display: flex;
       flex-direction: column;
       gap: 2px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(245,145,26,0.15);
       margin-bottom: 4px;
-      strong { font-size: 14px; color: #f1f5f9; }
-      span { font-size: 12px; color: #94a3b8; }
+      strong { font-size: 14px; color: #F5F0E8; }
+      span { font-size: 12px; color: #A89880; }
     }
   `]
 })

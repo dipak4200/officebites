@@ -54,18 +54,26 @@ import { AdminStats } from '../../../core/models/models';
           <mat-form-field appearance="outline">
             <mat-label>Full Name</mat-label>
             <input matInput formControlName="fullName">
+            <mat-error *ngIf="vendorForm.get('fullName')?.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="vendorForm.get('fullName')?.hasError('pattern')">Letters & spaces (2-50)</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
             <input matInput formControlName="email">
+            <mat-error *ngIf="vendorForm.get('email')?.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="vendorForm.get('email')?.hasError('email')">Invalid email</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Username</mat-label>
             <input matInput formControlName="username">
+            <mat-error *ngIf="vendorForm.get('username')?.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="vendorForm.get('username')?.hasError('pattern')">Alphanumeric (3-20)</mat-error>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Password</mat-label>
             <input matInput type="password" formControlName="password">
+            <mat-error *ngIf="vendorForm.get('password')?.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="vendorForm.get('password')?.hasError('pattern')">Strong pwd req</mat-error>
           </mat-form-field>
           <button mat-raised-button type="submit" class="btn-primary-gradient"
                   [disabled]="vendorForm.invalid">
@@ -105,10 +113,10 @@ export class AdminDashboardComponent implements OnInit {
 
   constructor(private adminService: AdminService, private fb: FormBuilder, private snackBar: MatSnackBar) {
     this.vendorForm = this.fb.group({
-      fullName: ['', Validators.required],
+      fullName: ['', [Validators.required, Validators.pattern(/^[a-zA-Z\s]{2,50}$/)]],
       email: ['', [Validators.required, Validators.email]],
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      username: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]{3,20}$/)]],
+      password: ['', [Validators.required, Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,50}$/)]]
     });
   }
 

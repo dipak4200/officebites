@@ -30,33 +30,48 @@ import { FoodItem } from '../../../core/models/models';
             <mat-form-field appearance="outline">
               <mat-label>Food Name</mat-label>
               <input matInput formControlName="name" placeholder="e.g. Grilled Chicken Rice">
+              <mat-error *ngIf="foodForm.get('name')?.hasError('required')">Name is required</mat-error>
+              <mat-error *ngIf="foodForm.get('name')?.hasError('minlength')">Min 3 chars</mat-error>
+              <mat-error *ngIf="foodForm.get('name')?.hasError('maxlength')">Max 100 chars</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Price (₹)</mat-label>
               <input matInput type="number" formControlName="price">
+              <mat-error *ngIf="foodForm.get('price')?.hasError('required')">Price is required</mat-error>
+              <mat-error *ngIf="foodForm.get('price')?.hasError('min')">Must be > 0</mat-error>
+              <mat-error *ngIf="foodForm.get('price')?.hasError('max')">Max ₹9999</mat-error>
             </mat-form-field>
           </div>
           <mat-form-field appearance="outline">
             <mat-label>Description</mat-label>
             <textarea matInput rows="2" formControlName="description" placeholder="Describe your dish..."></textarea>
+            <mat-error *ngIf="foodForm.get('description')?.hasError('maxlength')">Max 500 characters</mat-error>
           </mat-form-field>
           <p class="section-label">Nutritional Values (per serving)</p>
           <div class="form-row four">
             <mat-form-field appearance="outline">
               <mat-label>Calories (kcal)</mat-label>
               <input matInput type="number" formControlName="calories">
+              <mat-error *ngIf="foodForm.get('calories')?.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="foodForm.get('calories')?.hasError('min') || foodForm.get('calories')?.hasError('max')">1-5000</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Protein (g)</mat-label>
               <input matInput type="number" step="0.1" formControlName="protein">
+              <mat-error *ngIf="foodForm.get('protein')?.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="foodForm.get('protein')?.hasError('min') || foodForm.get('protein')?.hasError('max')">0-500</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Carbohydrates (g)</mat-label>
               <input matInput type="number" step="0.1" formControlName="carbohydrates">
+              <mat-error *ngIf="foodForm.get('carbohydrates')?.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="foodForm.get('carbohydrates')?.hasError('min') || foodForm.get('carbohydrates')?.hasError('max')">0-500</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Fats (g)</mat-label>
               <input matInput type="number" step="0.1" formControlName="fats">
+              <mat-error *ngIf="foodForm.get('fats')?.hasError('required')">Required</mat-error>
+              <mat-error *ngIf="foodForm.get('fats')?.hasError('min') || foodForm.get('fats')?.hasError('max')">0-500</mat-error>
             </mat-form-field>
           </div>
           <div class="form-actions">
@@ -97,8 +112,8 @@ import { FoodItem } from '../../../core/models/models';
     </div>
   `,
   styles: [`
-    .section-card { background: #1e293b; border: 1px solid rgba(99,102,241,0.2); border-radius: 16px; padding: 24px; }
-    h3 { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 20px; }
+    .section-card { background: #1C1612; border: 1px solid rgba(245,145,26,0.2); border-radius: 16px; padding: 24px; }
+    h3 { font-size: 16px; font-weight: 600; color: #F5F0E8; margin-bottom: 20px; }
     .section-label { font-size: 12px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin: 4px 0 8px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; &.four { grid-template-columns: repeat(4, 1fr); } }
     .form-actions { display: flex; gap: 12px; align-items: center; margin-top: 4px; }
@@ -119,13 +134,13 @@ export class VendorFoodItemsComponent implements OnInit {
 
   createForm(item?: FoodItem): FormGroup {
     return this.fb.group({
-      name: [item?.name || '', Validators.required],
-      description: [item?.description || ''],
-      price: [item?.price || '', Validators.required],
-      calories: [item?.calories || '', Validators.required],
-      protein: [item?.protein || '', Validators.required],
-      carbohydrates: [item?.carbohydrates || '', Validators.required],
-      fats: [item?.fats || '', Validators.required],
+      name: [item?.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      description: [item?.description || '', [Validators.maxLength(500)]],
+      price: [item?.price || '', [Validators.required, Validators.min(0.01), Validators.max(9999.99)]],
+      calories: [item?.calories || '', [Validators.required, Validators.min(1), Validators.max(5000)]],
+      protein: [item?.protein || '', [Validators.required, Validators.min(0), Validators.max(500)]],
+      carbohydrates: [item?.carbohydrates || '', [Validators.required, Validators.min(0), Validators.max(500)]],
+      fats: [item?.fats || '', [Validators.required, Validators.min(0), Validators.max(500)]],
       isActive: [item?.isActive ?? true]
     });
   }

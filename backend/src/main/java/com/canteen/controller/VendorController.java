@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class VendorController {
     private final UserRepository userRepository;
 
     @PostMapping("/food-items")
-    public ResponseEntity<?> addFoodItem(Authentication auth, @RequestBody FoodItem foodItem) {
+    public ResponseEntity<?> addFoodItem(Authentication auth, @Valid @RequestBody FoodItem foodItem) {
         Optional<User> vendorOpt = userRepository.findByUsername(auth.getName());
         if (vendorOpt.isEmpty() || vendorOpt.get().getRole() != Role.VENDOR) {
             return ResponseEntity.status(403).body("Access denied");
@@ -43,7 +44,7 @@ public class VendorController {
     @PutMapping("/food-items/{id}")
     public ResponseEntity<?> updateFoodItem(Authentication auth,
                                              @PathVariable Long id,
-                                             @RequestBody FoodItem updated) {
+                                             @Valid @RequestBody FoodItem updated) {
         Optional<User> vendorOpt = userRepository.findByUsername(auth.getName());
         if (vendorOpt.isEmpty()) return ResponseEntity.status(403).build();
 

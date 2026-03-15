@@ -22,7 +22,7 @@ import { RouterOutlet } from '@angular/router';
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(ellipse at top, #1e1b4b 0%, #0f172a 60%);
+      background: radial-gradient(ellipse at top, #2a1800 0%, #0F0D0A 65%);
       padding: 24px;
     }
     .auth-brand {
@@ -32,12 +32,12 @@ import { RouterOutlet } from '@angular/router';
       h1 {
         font-size: 32px;
         font-weight: 800;
-        background: linear-gradient(135deg, #6366f1, #06b6d4);
+        background: linear-gradient(135deg, #F5911A, #FF6B00);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
-      p { color: #94a3b8; font-size: 14px; margin-top: 4px; }
+      p { color: #A89880; font-size: 14px; margin-top: 4px; }
     }
   `]
 })

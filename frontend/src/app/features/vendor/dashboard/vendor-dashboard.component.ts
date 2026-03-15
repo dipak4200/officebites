@@ -67,8 +67,8 @@ import { FoodItem } from '../../../core/models/models';
   styles: [`
     .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
     .food-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-top: 16px; }
-    .section-card { background: #1e293b; border: 1px solid rgba(99,102,241,0.2); border-radius: 16px; padding: 24px; }
-    .section-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; h3 { color: #f1f5f9; font-size: 16px; font-weight: 600; } }
+    .section-card { background: #1C1612; border: 1px solid rgba(245,145,26,0.2); border-radius: 16px; padding: 24px; }
+    .section-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; h3 { color: #F5F0E8; font-size: 16px; font-weight: 600; } }
     .empty { color: #64748b; text-align: center; padding: 32px; }
   `]
 })

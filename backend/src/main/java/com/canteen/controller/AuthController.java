@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import com.canteen.dto.LoginRequest;
+import com.canteen.dto.RegisterRequest;
+import jakarta.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,9 +26,9 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> body) {
-        String username = body.get("username");
-        String password = body.get("password");
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) {
+        String username = request.getUsername();
+        String password = request.getPassword();
 
         Optional<User> userOpt = userRepository.findByUsername(username);
         if (userOpt.isEmpty() || !passwordEncoder.matches(password, userOpt.get().getPassword())) {
@@ -47,11 +50,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Map<String, String> body) {
-        String username = body.get("username");
-        String password = body.get("password");
-        String fullName = body.get("fullName");
-        String email = body.get("email");
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+        String username = request.getUsername();
+        String password = request.getPassword();
+        String fullName = request.getFullName();
+        String email = request.getEmail();
 
         if (userRepository.findByUsername(username).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)

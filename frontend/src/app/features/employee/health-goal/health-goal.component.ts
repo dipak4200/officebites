@@ -65,10 +65,14 @@ import { GoalType } from '../../../core/models/models';
               <mat-form-field appearance="outline">
                 <mat-label>Daily Calories Target (kcal)</mat-label>
                 <input matInput type="number" formControlName="targetDailyCalories">
+                <mat-error *ngIf="goalForm.get('targetDailyCalories')?.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="goalForm.get('targetDailyCalories')?.hasError('min') || goalForm.get('targetDailyCalories')?.hasError('max')">500 - 10,000 kcal</mat-error>
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>Daily Protein Target (g)</mat-label>
                 <input matInput type="number" step="0.1" formControlName="targetDailyProtein">
+                <mat-error *ngIf="goalForm.get('targetDailyProtein')?.hasError('required')">Required</mat-error>
+                <mat-error *ngIf="goalForm.get('targetDailyProtein')?.hasError('min') || goalForm.get('targetDailyProtein')?.hasError('max')">10 - 500 g</mat-error>
               </mat-form-field>
             </div>
 
@@ -76,10 +80,12 @@ import { GoalType } from '../../../core/models/models';
               <mat-form-field appearance="outline">
                 <mat-label>Current Weight (kg) — optional</mat-label>
                 <input matInput type="number" step="0.1" formControlName="currentWeight">
+                <mat-error *ngIf="goalForm.get('currentWeight')?.hasError('min') || goalForm.get('currentWeight')?.hasError('max')">20 - 300 kg</mat-error>
               </mat-form-field>
               <mat-form-field appearance="outline">
                 <mat-label>Target Weight (kg) — optional</mat-label>
                 <input matInput type="number" step="0.1" formControlName="targetWeight">
+                <mat-error *ngIf="goalForm.get('targetWeight')?.hasError('min') || goalForm.get('targetWeight')?.hasError('max')">20 - 300 kg</mat-error>
               </mat-form-field>
             </div>
 
@@ -97,20 +103,20 @@ import { GoalType } from '../../../core/models/models';
   `,
   styles: [`
     .goal-layout { display: grid; grid-template-columns: 280px 1fr; gap: 24px; }
-    .presets-panel, .form-panel { background: #1e293b; border: 1px solid rgba(99,102,241,0.2); border-radius: 16px; padding: 24px; }
+    .presets-panel, .form-panel { background: #1C1612; border: 1px solid rgba(245,145,26,0.2); border-radius: 16px; padding: 24px; }
     h3 { font-size: 16px; font-weight: 600; color: #f1f5f9; margin-bottom: 16px; }
     .preset-card {
       display: flex; align-items: center; gap: 14px; padding: 16px; margin-bottom: 12px;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      background: rgba(245,145,26,0.04); border: 1px solid rgba(245,145,26,0.1);
       border-radius: 12px; cursor: pointer; transition: all 0.2s;
-      &:hover { background: rgba(99,102,241,0.1); border-color: rgba(99,102,241,0.4); }
+      &:hover { background: rgba(245,145,26,0.1); border-color: rgba(245,145,26,0.4); }
     }
     .preset-icon { font-size: 28px; }
     .preset-name { font-size: 14px; font-weight: 600; color: #f1f5f9; }
     .preset-desc { font-size: 12px; color: #64748b; margin-top: 2px; }
     .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .save-btn { width: 100%; height: 48px; margin-top: 8px; }
-    .success-msg { background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; padding: 12px 16px; border-radius: 10px; font-size: 14px; margin-bottom: 12px; }
+    .success-msg { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: #86efac; padding: 12px 16px; border-radius: 10px; font-size: 14px; margin-bottom: 12px; }
     @media(max-width: 768px) { .goal-layout { grid-template-columns: 1fr; } .input-row { grid-template-columns: 1fr; } }
   `]
 })
@@ -127,10 +133,10 @@ export class HealthGoalComponent implements OnInit {
   constructor(private fb: FormBuilder, private employeeService: EmployeeService, private snackBar: MatSnackBar) {
     this.goalForm = this.fb.group({
       goalType: ['', Validators.required],
-      targetDailyCalories: ['', Validators.required],
-      targetDailyProtein: ['', Validators.required],
-      currentWeight: [null],
-      targetWeight: [null]
+      targetDailyCalories: ['', [Validators.required, Validators.min(500), Validators.max(10000)]],
+      targetDailyProtein: ['', [Validators.required, Validators.min(10), Validators.max(500)]],
+      currentWeight: [null, [Validators.min(20), Validators.max(300)]],
+      targetWeight: [null, [Validators.min(20), Validators.max(300)]]
     });
   }
 
