@@ -48,10 +48,13 @@ export type GoalType = 'WEIGHT_LOSS' | 'MUSCLE_GAIN' | 'MAINTENANCE';
 export interface HealthGoal {
   id?: number;
   goalType: GoalType;
-  targetDailyCalories: number;
-  targetDailyProtein: number;
+  targetDailyCalories?: number;
+  targetDailyProtein?: number;
   currentWeight?: number;
   targetWeight?: number;
+  height?: number;
+  age?: number;
+  gender?: 'MALE' | 'FEMALE' | 'OTHER';
 }
 
 export interface AdminStats {

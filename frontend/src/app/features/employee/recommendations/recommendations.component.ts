@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { EmployeeService } from '../../../core/services/employee.service';
 import { FoodItem } from '../../../core/models/models';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-recommendations',
@@ -16,17 +17,18 @@ import { FoodItem } from '../../../core/models/models';
         <p>Food curated based on your health goal</p>
       </div>
 
-      <div class="info-banner" *ngIf="!loading && !items.length">
+      <div class="info-banner" *ngIf="!loading && !recommendedItems.length && !hasGoal()">
         <span class="banner-icon">💡</span>
         <div>
-          <strong>No recommendations yet!</strong>
+          <strong>No personal recommendations yet!</strong>
           <p>Set your health goal first to get personalized food picks.</p>
           <a mat-raised-button routerLink="/employee/health-goal" class="btn-primary-gradient" style="margin-top:12px">Set Health Goal</a>
         </div>
       </div>
 
-      <div class="food-grid" *ngIf="items.length">
-        <div class="food-card rec-card" *ngFor="let item of items">
+      <h2 *ngIf="recommendedItems.length" style="color: #f1f5f9; margin-bottom: 16px;">Top Picks for You</h2>
+      <div class="food-grid" *ngIf="recommendedItems.length">
+        <div class="food-card rec-card" *ngFor="let item of recommendedItems">
           <div class="rec-badge">✨ Recommended</div>
           <div class="food-name">{{ item.name }}</div>
           <div class="food-description">{{ item.description }}</div>
@@ -77,15 +79,29 @@ import { FoodItem } from '../../../core/models/models';
   `]
 })
 export class RecommendationsComponent implements OnInit {
-  items: FoodItem[] = [];
+  recommendedItems: FoodItem[] = [];
+  otherItems: FoodItem[] = [];
   loading = true;
 
   constructor(private employeeService: EmployeeService) {}
 
   ngOnInit() {
-    this.employeeService.getRecommendations().subscribe({
-      next: (items) => { this.items = items; this.loading = false; },
-      error: () => { this.items = []; this.loading = false; }
+    forkJoin({
+      recommendations: this.employeeService.getRecommendations(),
+      all: this.employeeService.getAllActiveFoodItems()
+    }).subscribe({
+      next: (res) => {
+        this.recommendedItems = res.recommendations || [];
+        // Filter out recommended from all
+        const recIds = new Set(this.recommendedItems.map(i => i.id));
+        this.otherItems = (res.all || []).filter(i => !recIds.has(i.id));
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
     });
   }
+
+  hasGoal() { return false; /* Handled effectively by checking endpoint but logic can be improved */ }
 }

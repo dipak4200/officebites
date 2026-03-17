@@ -28,11 +28,11 @@ import { HealthGoal } from '../../../core/models/models';
             </div>
           </div>
           <div class="goal-details">
-            <div class="detail-item">
+            <div class="detail-item" *ngIf="healthGoal.targetDailyCalories">
               <span class="d-label">Daily Calories</span>
               <span class="d-value">{{ healthGoal.targetDailyCalories }} kcal</span>
             </div>
-            <div class="detail-item">
+            <div class="detail-item" *ngIf="healthGoal.targetDailyProtein">
               <span class="d-label">Daily Protein</span>
               <span class="d-value">{{ healthGoal.targetDailyProtein }}g</span>
             </div>

@@ -21,15 +21,9 @@ public class HealthGoal {
     @Column(nullable = false)
     private GoalType goalType;
 
-    @jakarta.validation.constraints.NotNull(message = "Target daily calories is required")
-    @jakarta.validation.constraints.Min(value = 500, message = "Target calories must be at least 500")
-    @jakarta.validation.constraints.Max(value = 10000, message = "Target calories cannot exceed 10000")
     @Column(nullable = false)
     private Integer targetDailyCalories;
 
-    @jakarta.validation.constraints.NotNull(message = "Target daily protein is required")
-    @jakarta.validation.constraints.DecimalMin(value = "10.0", message = "Target protein must be at least 10g")
-    @jakarta.validation.constraints.DecimalMax(value = "500.0", message = "Target protein cannot exceed 500g")
     @Column(nullable = false)
     private Double targetDailyProtein;
 
@@ -41,4 +35,16 @@ public class HealthGoal {
     @jakarta.validation.constraints.DecimalMin(value = "20.0", message = "Target weight must be at least 20kg")
     @jakarta.validation.constraints.DecimalMax(value = "300.0", message = "Target weight cannot exceed 300kg")
     private Double targetWeight;
+
+    // Added for BMR calculation
+    @jakarta.validation.constraints.DecimalMin(value = "50.0", message = "Height must be at least 50cm")
+    @jakarta.validation.constraints.DecimalMax(value = "300.0", message = "Height cannot exceed 300cm")
+    private Double height;
+
+    @jakarta.validation.constraints.Min(value = 10, message = "Age must be at least 10")
+    @jakarta.validation.constraints.Max(value = 120, message = "Age cannot exceed 120")
+    private Integer age;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 }

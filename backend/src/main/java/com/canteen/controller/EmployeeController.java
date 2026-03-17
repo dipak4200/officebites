@@ -2,6 +2,7 @@ package com.canteen.controller;
 
 import com.canteen.entity.FoodItem;
 import com.canteen.entity.GoalType;
+import com.canteen.entity.Gender;
 import com.canteen.entity.HealthGoal;
 import com.canteen.entity.Role;
 import com.canteen.entity.User;
@@ -41,10 +42,39 @@ public class EmployeeController {
         HealthGoal goal = existing.orElse(new HealthGoal());
         goal.setEmployee(employee);
         goal.setGoalType(healthGoal.getGoalType());
-        goal.setTargetDailyCalories(healthGoal.getTargetDailyCalories());
-        goal.setTargetDailyProtein(healthGoal.getTargetDailyProtein());
         goal.setCurrentWeight(healthGoal.getCurrentWeight());
         goal.setTargetWeight(healthGoal.getTargetWeight());
+        goal.setHeight(healthGoal.getHeight());
+        goal.setAge(healthGoal.getAge());
+        goal.setGender(healthGoal.getGender());
+
+        // Calculate BMR
+        double bmr = 2000; // default
+        if (goal.getCurrentWeight() != null && goal.getHeight() != null && goal.getAge() != null && goal.getGender() != null) {
+            if (goal.getGender() == Gender.MALE) {
+                bmr = 10 * goal.getCurrentWeight() + 6.25 * goal.getHeight() - 5 * goal.getAge() + 5;
+            } else if (goal.getGender() == Gender.FEMALE) {
+                bmr = 10 * goal.getCurrentWeight() + 6.25 * goal.getHeight() - 5 * goal.getAge() - 161;
+            } else {
+                bmr = 10 * goal.getCurrentWeight() + 6.25 * goal.getHeight() - 5 * goal.getAge() - 78; // Approximate for other
+            }
+        }
+
+        // TDEE estimation (Assume lightly active)
+        double tdee = bmr * 1.375;
+
+        // Adjust based on goal
+        if (goal.getGoalType() == GoalType.WEIGHT_LOSS) {
+            goal.setTargetDailyCalories((int) (tdee - 500));
+            goal.setTargetDailyProtein(goal.getCurrentWeight() != null ? goal.getCurrentWeight() * 2.0 : 100.0);
+        } else if (goal.getGoalType() == GoalType.MUSCLE_GAIN) {
+            goal.setTargetDailyCalories((int) (tdee + 500));
+            goal.setTargetDailyProtein(goal.getCurrentWeight() != null ? goal.getCurrentWeight() * 2.2 : 150.0);
+        } else {
+            goal.setTargetDailyCalories((int) tdee);
+            goal.setTargetDailyProtein(goal.getCurrentWeight() != null ? goal.getCurrentWeight() * 1.6 : 120.0);
+        }
+
         return ResponseEntity.ok(healthGoalRepository.save(goal));
     }
 
