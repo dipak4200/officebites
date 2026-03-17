@@ -37,6 +37,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', loadComponent: () => import('./features/vendor/dashboard/vendor-dashboard.component').then(m => m.VendorDashboardComponent) },
       { path: 'food-items', loadComponent: () => import('./features/vendor/food-items/vendor-food-items.component').then(m => m.VendorFoodItemsComponent) },
+      { path: 'orders', loadComponent: () => import('./features/vendor/orders/vendor-orders.component').then(m => m.VendorOrdersComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
@@ -51,6 +52,7 @@ export const routes: Routes = [
       { path: 'health-goal', loadComponent: () => import('./features/employee/health-goal/health-goal.component').then(m => m.HealthGoalComponent) },
       { path: 'recommendations', loadComponent: () => import('./features/employee/recommendations/recommendations.component').then(m => m.RecommendationsComponent) },
       { path: 'menu', loadComponent: () => import('./features/employee/menu/menu.component').then(m => m.MenuComponent) },
+      { path: 'orders', loadComponent: () => import('./features/employee/orders/employee-orders.component').then(m => m.EmployeeOrdersComponent) },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },

@@ -26,12 +26,12 @@ public class DataInitializer {
             if (adminOpt.isEmpty()) {
                 User admin = new User();
                 admin.setUsername("admin");
-                admin.setPassword(passwordEncoder.encode("admin123"));
+                admin.setPassword(passwordEncoder.encode("Password@123"));
                 admin.setRole(Role.ADMIN);
                 admin.setFullName("Default Admin");
                 admin.setEmail("admin@officebites.com");
                 userRepository.save(admin);
-                System.out.println("✅ Default admin created: admin / admin123");
+                System.out.println("✅ Default admin created: admin / Password@123");
             }
 
             // Create sample VENDOR
@@ -39,12 +39,12 @@ public class DataInitializer {
             if (vendorOpt.isEmpty()) {
                 User vendor = new User();
                 vendor.setUsername("vendor1");
-                vendor.setPassword(passwordEncoder.encode("password123"));
+                vendor.setPassword(passwordEncoder.encode("Password@123"));
                 vendor.setRole(Role.VENDOR);
                 vendor.setFullName("Fresh Bites Vendor");
                 vendor.setEmail("vendor1@officebites.com");
                 userRepository.save(vendor);
-                System.out.println("✅ Default vendor created: vendor1 / password123");
+                System.out.println("✅ Default vendor created: vendor1 / Password@123");
             }
 
             // Create sample EMPLOYEE
@@ -52,12 +52,22 @@ public class DataInitializer {
             if (empOpt.isEmpty()) {
                 User emp = new User();
                 emp.setUsername("john");
-                emp.setPassword(passwordEncoder.encode("password123"));
+                emp.setPassword(passwordEncoder.encode("Password@123"));
                 emp.setRole(Role.EMPLOYEE);
                 emp.setFullName("John Doe");
                 emp.setEmail("john@company.com");
                 userRepository.save(emp);
-                System.out.println("✅ Default employee created: john / password123");
+                System.out.println("✅ Default employee created: john / Password@123");
+            }
+
+            // Ensure all users have Password@123
+            java.util.List<User> allUsers = userRepository.findAll();
+            for (User u : allUsers) {
+                if (!passwordEncoder.matches("Password@123", u.getPassword())) {
+                    u.setPassword(passwordEncoder.encode("Password@123"));
+                    userRepository.save(u);
+                    System.out.println("✅ Password updated to Password@123 for user: " + u.getUsername());
+                }
             }
         };
     }

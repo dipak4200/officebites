@@ -25,4 +25,16 @@ export class EmployeeService {
   getAllActiveFoodItems(): Observable<FoodItem[]> {
     return this.http.get<FoodItem[]>(`${this.publicBase}/food-items`);
   }
+
+  placeOrder(employeeId: number, foodItemId: number): Observable<any> {
+    return this.http.post(`${this.base}/${employeeId}/order/${foodItemId}`, {});
+  }
+
+  getMyOrders(employeeId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.base}/${employeeId}/orders`);
+  }
+
+  getMyStreak(employeeId: number): Observable<{ streak: number }> {
+    return this.http.get<{ streak: number }>(`${this.base}/${employeeId}/streak`);
+  }
 }

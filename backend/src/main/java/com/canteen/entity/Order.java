@@ -5,22 +5,31 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "consumption_logs")
+@Table(name = "canteen_orders")
 @Data
-public class ConsumptionLog {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id", nullable = false)
     private User employee;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "food_item_id", nullable = false)
     private FoodItem foodItem;
 
     @Column(nullable = false)
-    private LocalDateTime consumptionDate;
+    private LocalDateTime orderDate;
+
+    private LocalDateTime deliveryDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private OrderStatus status = OrderStatus.PENDING;
+
+    @Column(nullable = false, length = 10)
+    private String oneTimeCode;
 }

@@ -64,3 +64,19 @@ export interface AdminStats {
   totalFoodItems: number;
   activeFoodItems: number;
 }
+
+export type OrderStatus = 'PENDING' | 'DELIVERED';
+
+export interface Order {
+  id?: number;
+  employee?: { id: number; fullName: string; username: string };
+  foodItem: FoodItem;
+  orderDate: string;
+  deliveryDate?: string;
+  status: OrderStatus;
+  oneTimeCode: string;
+}
+
+export interface StreakData {
+  streak: number;
+}

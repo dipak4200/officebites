@@ -24,4 +24,12 @@ export class VendorService {
   deleteFoodItem(id: number): Observable<any> {
     return this.http.delete(`${this.base}/food-items/${id}`);
   }
+
+  getPendingOrders(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.base}/orders/pending`);
+  }
+
+  deliverOrder(otc: string): Observable<any> {
+    return this.http.post(`${this.base}/orders/deliver/${otc}`, {});
+  }
 }

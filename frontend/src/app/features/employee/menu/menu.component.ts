@@ -4,13 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EmployeeService } from '../../../core/services/employee.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { FoodItem } from '../../../core/models/models';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatIconModule],
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule, MatSnackBarModule],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -50,6 +53,9 @@ import { FoodItem } from '../../../core/models/models';
           <div class="vendor-tag" *ngIf="item.vendor">
             🏪 {{ item.vendor.fullName || item.vendor.username }}
           </div>
+          <button mat-raised-button color="primary" style="margin-top: 16px; width: 100%" (click)="placeOrder(item)">
+            Order Now
+          </button>
         </div>
       </div>
 
@@ -78,7 +84,11 @@ export class MenuComponent implements OnInit {
   searchTerm = '';
   loading = true;
 
-  constructor(private employeeService: EmployeeService) {}
+  constructor(
+    private employeeService: EmployeeService, 
+    private auth: AuthService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
     this.employeeService.getAllActiveFoodItems().subscribe({
@@ -93,5 +103,19 @@ export class MenuComponent implements OnInit {
       i.name.toLowerCase().includes(term) ||
       i.description?.toLowerCase().includes(term)
     );
+  }
+
+  placeOrder(item: FoodItem) {
+    const user = this.auth.currentUser;
+    if (!user || user.role !== 'EMPLOYEE') return;
+    
+    this.employeeService.placeOrder(user.userId, item.id!).subscribe({
+      next: (order) => {
+        this.snackBar.open(`Successfully ordered ${item.name}! Your One Time Code is: ${order.oneTimeCode}`, 'Close', { duration: 10000 });
+      },
+      error: () => {
+        this.snackBar.open('Error placing order.', 'OK', { duration: 3000, panelClass: 'snack-error' });
+      }
+    });
   }
 }

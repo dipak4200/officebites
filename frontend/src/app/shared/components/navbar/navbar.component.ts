@@ -29,12 +29,14 @@ import { MatIconModule } from '@angular/material/icon';
         <ng-container *ngIf="role === 'VENDOR'">
           <a routerLink="/vendor/dashboard" class="nav-link">Dashboard</a>
           <a routerLink="/vendor/food-items" class="nav-link">My Food Items</a>
+          <a routerLink="/vendor/orders" class="nav-link">Pending Orders</a>
         </ng-container>
 
         <!-- Employee links -->
         <ng-container *ngIf="role === 'EMPLOYEE'">
           <a routerLink="/employee/dashboard" class="nav-link">Dashboard</a>
           <a routerLink="/employee/menu" class="nav-link">Menu</a>
+          <a routerLink="/employee/orders" class="nav-link">My Orders</a>
           <a routerLink="/employee/recommendations" class="nav-link">For Me</a>
           <a routerLink="/employee/health-goal" class="nav-link">Health Goal</a>
         </ng-container>

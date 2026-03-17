@@ -3,7 +3,6 @@ package com.canteen.controller;
 import com.canteen.entity.FoodItem;
 import com.canteen.entity.Role;
 import com.canteen.entity.User;
-import com.canteen.repository.ConsumptionLogRepository;
 import com.canteen.repository.FoodItemRepository;
 import com.canteen.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,6 @@ public class AdminController {
 
     private final UserRepository userRepository;
     private final FoodItemRepository foodItemRepository;
-    private final ConsumptionLogRepository consumptionLogRepository;
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/users")
