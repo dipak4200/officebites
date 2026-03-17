@@ -31,8 +31,8 @@ import { FoodItem } from '../../../core/models/models';
               <mat-label>Food Name</mat-label>
               <input matInput formControlName="name" placeholder="e.g. Grilled Chicken Rice">
               <mat-error *ngIf="foodForm.get('name')?.hasError('required')">Name is required</mat-error>
-              <mat-error *ngIf="foodForm.get('name')?.hasError('minlength')">Min 3 chars</mat-error>
-              <mat-error *ngIf="foodForm.get('name')?.hasError('maxlength')">Max 100 chars</mat-error>
+              <mat-error *ngIf="foodForm.get('name')?.hasError('minlength') || foodForm.get('name')?.hasError('maxlength')">3-100 chars</mat-error>
+              <mat-error *ngIf="foodForm.get('name')?.hasError('pattern')">Safe text only</mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Price (₹)</mat-label>
@@ -134,7 +134,7 @@ export class VendorFoodItemsComponent implements OnInit {
 
   createForm(item?: FoodItem): FormGroup {
     return this.fb.group({
-      name: [item?.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+      name: [item?.name || '', [Validators.required, Validators.minLength(3), Validators.maxLength(100), Validators.pattern(/^[a-zA-Z0-9\s\-_,&()]+$/)]],
       description: [item?.description || '', [Validators.maxLength(500)]],
       price: [item?.price || '', [Validators.required, Validators.min(0.01), Validators.max(9999.99)]],
       calories: [item?.calories || '', [Validators.required, Validators.min(1), Validators.max(5000)]],

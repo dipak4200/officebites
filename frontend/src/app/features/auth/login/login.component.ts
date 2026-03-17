@@ -27,7 +27,7 @@ import { AuthService } from '../../../core/services/auth.service';
             autocomplete="username">
           <div class="field-error" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
             <span *ngIf="loginForm.get('username')?.errors?.['required']">Username is required</span>
-            <span *ngIf="loginForm.get('username')?.errors?.['minlength']">Minimum 3 characters</span>
+            <span *ngIf="loginForm.get('username')?.errors?.['pattern']">Alphanumeric & underscores (3-20 chars)</span>
           </div>
         </div>
 
@@ -42,7 +42,7 @@ import { AuthService } from '../../../core/services/auth.service';
             autocomplete="current-password">
           <div class="field-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
             <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
-            <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Minimum 6 characters</span>
+            <span *ngIf="loginForm.get('password')?.errors?.['pattern']">Must be 8-50 chars, with upper, lower, digit & special char (&#64;#$%^&+=!)</span>
           </div>
         </div>
 
@@ -219,8 +219,8 @@ export class LoginComponent {
 
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      username: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]{3,20}$/)]],
+      password: ['', [Validators.required, Validators.pattern(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,50}$/)]]
     });
   }
 
