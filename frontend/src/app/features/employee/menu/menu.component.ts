@@ -10,11 +10,16 @@ import { EmployeeService } from '../../../core/services/employee.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { FoodItem } from '../../../core/models/models';
 import { forkJoin } from 'rxjs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { CartService } from '../../../core/services/cart.service';
+import { CartDialogComponent } from '../../../shared/components/cart-dialog/cart-dialog.component';
+import { PaymentDialogComponent } from '../../../shared/components/payment-dialog/payment-dialog.component';
+import { PaymentSuccessDialogComponent } from '../../../shared/components/payment-success-dialog/payment-success-dialog.component';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule, MatSnackBarModule],
+  imports: [CommonModule, FormsModule, MatFormFieldModule, MatInputModule, MatIconModule, MatButtonModule, MatSnackBarModule, MatDialogModule],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -68,8 +73,8 @@ import { forkJoin } from 'rxjs';
                 <div class="nutrition-item"><div class="n-value">{{ item.carbohydrates }}g</div><div class="n-label">Carbs</div></div>
                 <div class="nutrition-item"><div class="n-value">{{ item.fats }}g</div><div class="n-label">Fats</div></div>
               </div>
-              <button mat-raised-button color="primary" style="margin-top: 16px; width: 100%" (click)="placeOrder(item)">
-                Order Now
+              <button mat-raised-button color="primary" style="margin-top: 16px; width: 100%" (click)="addToCart(item)">
+                Add to Cart
               </button>
             </div>
           </div>
@@ -89,8 +94,8 @@ import { forkJoin } from 'rxjs';
                 <div class="nutrition-item"><div class="n-value">{{ item.carbohydrates }}g</div><div class="n-label">Carbs</div></div>
                 <div class="nutrition-item"><div class="n-value">{{ item.fats }}g</div><div class="n-label">Fats</div></div>
               </div>
-              <button mat-raised-button color="primary" style="margin-top: 16px; width: 100%" (click)="placeOrder(item)">
-                Order Now
+              <button mat-raised-button color="primary" style="margin-top: 16px; width: 100%" (click)="addToCart(item)">
+                Add to Cart
               </button>
             </div>
           </div>
@@ -101,6 +106,13 @@ import { forkJoin } from 'rxjs';
           <p style="color:#64748b;margin-top:12px">{{ itemSearchTerm ? 'No dishes match your search' : 'No food items available for this vendor' }}</p>
         </div>
       </div>
+
+      <!-- Floating Cart Button -->
+      <button class="fab-cart" mat-fab color="primary" (click)="openCart()" *ngIf="(cartService.items$ | async)?.length">
+        <mat-icon style="font-size: 24px; display: flex; justify-content: center; align-items: center; width: 24px; height: 24px; margin: 0 auto;">shopping_cart</mat-icon>
+        <span class="fab-badge">{{ (cartService.items$ | async)?.length }}</span>
+      </button>
+
     </div>
   `,
   styles: [`
@@ -130,6 +142,8 @@ import { forkJoin } from 'rxjs';
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .empty { text-align: center; padding: 80px 0; }
+    .fab-cart { position: fixed; bottom: 32px; right: 32px; z-index: 1000; box-shadow: 0 4px 12px rgba(245,145,26,0.4); width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; background: linear-gradient(135deg, #F5911A, #FF6B00); color: white; }
+    .fab-badge { position: absolute; top: 0px; right: 0px; background: #ef4444; color: white; width: 20px; height: 20px; border-radius: 10px; font-size: 11px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid #1C1612; }
   `]
 })
 export class MenuComponent implements OnInit {
@@ -152,7 +166,9 @@ export class MenuComponent implements OnInit {
   constructor(
     private employeeService: EmployeeService, 
     private auth: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    public cartService: CartService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -221,16 +237,42 @@ export class MenuComponent implements OnInit {
     );
   }
 
-  placeOrder(item: FoodItem) {
+  addToCart(item: FoodItem) {
+    this.cartService.addToCart(item);
+    this.snackBar.open(`${item.name} added to cart!`, 'OK', { duration: 2000 });
+  }
+
+  openCart() {
+    const dialogRef = this.dialog.open(CartDialogComponent, { width: '400px' });
+    dialogRef.afterClosed().subscribe(checkout => {
+      if (checkout) {
+        const payRef = this.dialog.open(PaymentDialogComponent, { width: '400px' });
+        payRef.afterClosed().subscribe(paid => {
+          if (paid) {
+            const successRef = this.dialog.open(PaymentSuccessDialogComponent, { width: '400px', disableClose: true });
+            successRef.afterClosed().subscribe(() => {
+              this.processOrders();
+            });
+          }
+        });
+      }
+    });
+  }
+
+  processOrders() {
+    const items = this.cartService.getItems();
     const user = this.auth.currentUser;
-    if (!user || user.role !== 'EMPLOYEE') return;
+    if (!user) return;
     
-    this.employeeService.placeOrder(user.userId, item.id!).subscribe({
-      next: (order) => {
-        this.snackBar.open(`Successfully ordered ${item.name}! Your One Time Code is: ${order.oneTimeCode}`, 'Close', { duration: 10000 });
+    const requests = items.map(item => this.employeeService.placeOrder(user.userId, item.id!));
+    forkJoin(requests).subscribe({
+      next: (responses) => {
+        const otcs = responses.map((r: any) => r.oneTimeCode).join(', ');
+        this.snackBar.open(`Orders placed! Your OTCs: ${otcs}`, 'Close', { duration: 10000 });
+        this.cartService.clearCart();
       },
       error: () => {
-        this.snackBar.open('Error placing order.', 'OK', { duration: 3000, panelClass: 'snack-error' });
+        this.snackBar.open('Error placing some orders.', 'OK', { duration: 3000, panelClass: 'snack-error' });
       }
     });
   }

@@ -1,20 +1,23 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { VendorService } from '../../../core/services/vendor.service';
 import { FoodItem } from '../../../core/models/models';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-vendor-food-items',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatFormFieldModule,
-    MatInputModule, MatSnackBarModule, MatIconModule, MatSlideToggleModule],
+    MatInputModule, MatSnackBarModule, MatIconModule, MatSlideToggleModule, MatDialogModule],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -128,7 +131,7 @@ export class VendorFoodItemsComponent implements OnInit {
   foodForm: FormGroup;
   editing: FoodItem | null = null;
 
-  constructor(private vendorService: VendorService, private fb: FormBuilder, private snackBar: MatSnackBar) {
+  constructor(private vendorService: VendorService, private fb: FormBuilder, private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
     this.foodForm = this.createForm();
   }
 
@@ -158,9 +161,7 @@ export class VendorFoodItemsComponent implements OnInit {
     call.subscribe({
       next: () => {
         this.snackBar.open(this.editing ? 'Item updated!' : 'Item added!', 'OK', { duration: 3000, panelClass: 'snack-success' });
-        this.foodForm = this.createForm();
-        this.editing = null;
-        this.load();
+        this.router.navigate(['/vendor/dashboard']);
       },
       error: () => this.snackBar.open('Error saving item', 'OK', { duration: 3000, panelClass: 'snack-error' })
     });
@@ -175,10 +176,18 @@ export class VendorFoodItemsComponent implements OnInit {
   cancelEdit() { this.editing = null; this.foodForm = this.createForm(); }
 
   delete(item: FoodItem) {
-    if (!confirm('Delete this food item?')) return;
-    this.vendorService.deleteFoodItem(item.id!).subscribe({
-      next: () => { this.snackBar.open('Deleted!', 'OK', { duration: 2000 }); this.load(); },
-      error: () => this.snackBar.open('Error deleting', 'OK', { duration: 2000, panelClass: 'snack-error' })
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: { title: 'Delete Food Item', message: 'Are you sure you want to delete this food item?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.vendorService.deleteFoodItem(item.id!).subscribe({
+          next: () => { this.snackBar.open('Deleted!', 'OK', { duration: 2000 }); this.load(); },
+          error: () => this.snackBar.open('Error deleting', 'OK', { duration: 2000, panelClass: 'snack-error' })
+        });
+      }
     });
   }
 }

@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { AdminService } from '../../../core/services/admin.service';
 import { User } from '../../../core/models/models';
+import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, MatSnackBarModule, MatIconModule],
+  imports: [CommonModule, MatButtonModule, MatSnackBarModule, MatIconModule, MatDialogModule],
   template: `
     <div class="page-container">
       <div class="page-header">
@@ -68,7 +70,7 @@ import { User } from '../../../core/models/models';
 export class AdminUsersComponent implements OnInit {
   users: User[] = [];
 
-  constructor(private adminService: AdminService, private snackBar: MatSnackBar) {}
+  constructor(private adminService: AdminService, private snackBar: MatSnackBar, private dialog: MatDialog) {}
 
   ngOnInit() { this.loadUsers(); }
 
@@ -77,13 +79,21 @@ export class AdminUsersComponent implements OnInit {
   }
 
   deleteUser(user: User) {
-    if (!confirm(`Delete user "${user.username}"?`)) return;
-    this.adminService.deleteUser(user.id).subscribe({
-      next: () => {
-        this.snackBar.open('User deleted', 'OK', { duration: 3000, panelClass: 'snack-success' });
-        this.loadUsers();
-      },
-      error: () => this.snackBar.open('Error deleting user', 'OK', { duration: 3000, panelClass: 'snack-error' })
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: { title: 'Delete User', message: `Are you sure you want to delete user "${user.username}"?` }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.adminService.deleteUser(user.id).subscribe({
+          next: () => {
+            this.snackBar.open('User deleted', 'OK', { duration: 3000, panelClass: 'snack-success' });
+            this.loadUsers();
+          },
+          error: () => this.snackBar.open('Error deleting user', 'OK', { duration: 3000, panelClass: 'snack-error' })
+        });
+      }
     });
   }
 }

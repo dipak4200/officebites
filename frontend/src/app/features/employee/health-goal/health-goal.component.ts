@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -80,6 +80,13 @@ import { GoalType } from '../../../core/models/models';
             </mat-form-field>
           </div>
 
+          <div *ngIf="goalForm.hasError('invalidTargetWeightLoss')" class="custom-error">
+            For Weight Loss, target weight must be less than current weight.
+          </div>
+          <div *ngIf="goalForm.hasError('invalidTargetWeightGain')" class="custom-error">
+            For Muscle Gain, target weight must be greater than current weight.
+          </div>
+
           <div class="success-msg" *ngIf="saved">
             ✅ Health goal saved! Food recommendations are now personalized for you.
           </div>
@@ -98,6 +105,7 @@ import { GoalType } from '../../../core/models/models';
     .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .save-btn { width: 100%; height: 48px; margin-top: 8px; }
     .success-msg { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: #86efac; padding: 12px 16px; border-radius: 10px; font-size: 14px; margin-bottom: 12px; }
+    .custom-error { background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; padding: 12px 16px; border-radius: 10px; font-size: 14px; margin-bottom: 12px; }
     @media(max-width: 768px) { .goal-layout { grid-template-columns: 1fr; } .input-row { grid-template-columns: 1fr; } }
   `]
 })
@@ -113,8 +121,24 @@ export class HealthGoalComponent implements OnInit {
       height: [null, [Validators.required, Validators.min(50), Validators.max(300)]],
       currentWeight: [null, [Validators.required, Validators.min(20), Validators.max(300)]],
       targetWeight: [null, [Validators.min(20), Validators.max(300)]]
-    });
+    }, { validators: this.targetWeightValidator });
   }
+
+  targetWeightValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const goalType = control.get('goalType')?.value;
+    const currentWeight = control.get('currentWeight')?.value;
+    const targetWeight = control.get('targetWeight')?.value;
+
+    if (goalType && currentWeight && targetWeight) {
+      if (goalType === 'WEIGHT_LOSS' && targetWeight >= currentWeight) {
+        return { invalidTargetWeightLoss: true };
+      }
+      if (goalType === 'MUSCLE_GAIN' && targetWeight <= currentWeight) {
+        return { invalidTargetWeightGain: true };
+      }
+    }
+    return null;
+  };
 
   ngOnInit() {
     this.employeeService.getMyHealthGoal().subscribe({
