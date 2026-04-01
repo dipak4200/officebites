@@ -59,17 +59,17 @@ import { AuthService } from '../../../core/services/auth.service';
       <div class="demo-accounts">
         <p class="demo-title">Demo Accounts</p>
         <div class="demo-grid">
-          <div class="demo-item" (click)="fill('admin','admin123')">
+          <div class="demo-item" (click)="fill('admin','Password@123')">
             <span class="demo-role admin">ADMIN</span>
-            <code>admin / admin123</code>
+            <code>admin / Password&#64;123</code>
           </div>
-          <div class="demo-item" (click)="fill('vendor1','password123')">
+          <div class="demo-item" (click)="fill('vendor1','Password@123')">
             <span class="demo-role vendor">VENDOR</span>
-            <code>vendor1 / password123</code>
+            <code>vendor1 / Password&#64;123</code>
           </div>
-          <div class="demo-item" (click)="fill('john','password123')">
+          <div class="demo-item" (click)="fill('john','Password@123')">
             <span class="demo-role employee">EMPLOYEE</span>
-            <code>john / password123</code>
+            <code>john / Password&#64;123</code>
           </div>
         </div>
       </div>
