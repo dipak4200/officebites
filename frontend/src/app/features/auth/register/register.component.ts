@@ -50,7 +50,7 @@ import { AuthService } from '../../../core/services/auth.service';
                  [class.invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
           <div class="field-error" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
             <span *ngIf="registerForm.get('email')?.errors?.['required']">⚠ Email is required</span>
-            <span *ngIf="registerForm.get('email')?.errors?.['pattern']">⚠ Enter a valid email (e.g. name@domain.com)</span>
+            <span *ngIf="registerForm.get('email')?.errors?.['pattern']">⚠ Enter a valid email (e.g. name&#64;domain.com)</span>
           </div>
         </div>
 
@@ -74,10 +74,10 @@ import { AuthService } from '../../../core/services/auth.service';
                  [class.invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
           <div class="field-error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
             <span *ngIf="registerForm.get('password')?.errors?.['required']">⚠ Password is required</span>
-            <span *ngIf="registerForm.get('password')?.errors?.['pattern']">⚠ Must be 8–50 chars with uppercase, lowercase, digit & special char (@#$%^&+=!)</span>
+            <span *ngIf="registerForm.get('password')?.errors?.['pattern']">⚠ Must be 8–50 chars with uppercase, lowercase, digit &amp; special char (&#64;#$%^&amp;+=!)</span>
           </div>
           <div class="password-hint">
-            Tip: Use a mix like <code>Name@Year123</code>
+            Tip: Use a mix like <code>Name&#64;Year123</code>
           </div>
         </div>
 
